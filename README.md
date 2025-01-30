@@ -1,86 +1,141 @@
-Creating a `README.md` for your WhisperAI extension repository is essential to provide clear instructions, documentation, and context for users and developers. Below is a template you can use for your repository:
+# WhisperAI Extension for Subtl and Third-Party Applications
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# WhisperAI Extension for Subtl and Other PyQt5 Applications
+A standalone WhisperAI extension for speech-to-text subtitling. Designed for [Subtl](https://github.com/your-subtl-repo) but compatible with any application through CLI/API integration.
 
-This repository contains a WhisperAI extension designed to integrate OpenAI's Whisper speech recognition model into PyQt5 applications, such as the [Subtl](https://github.com/yourusername/subtl) subtitle editing app. This extension allows users to generate and manipulate subtitles using Whisper's powerful speech-to-text capabilities.
+![Demo](assets/demo.gif) <!-- Optional: Add a demo GIF/image if available -->
 
 ## Features
-- **Seamless Integration**: Easily integrate WhisperAI into your PyQt5 application.
-- **Speech-to-Text**: Convert audio files into accurate subtitles using OpenAI's Whisper model.
-- **Customizable**: Modify the extension to suit your application's needs.
-- **Cross-Platform**: Works on Windows, macOS, and Linux.
+
+- 🎙️ **Accurate Transcription**: Leverages OpenAI's Whisper models
+- 🌍 **Multilingual Support**: 100+ languages
+- ⚡ **Batch Processing**: Process multiple files sequentially
+- 🔌 **Easy Integration**: Simple CLI interface and JSON I/O
+- 📦 **Dependency-Free**: Single executable for Windows/macOS/Linux
 
 ## Installation
 
-### Prerequisites
-- Python 3.7 or higher
-- PyQt5
-- OpenAI Whisper (install via `pip install openai-whisper`)
-- FFmpeg (required by Whisper, [download here](https://ffmpeg.org/download.html))
+### For Subtl Users
+1. Download the latest `WhisperAIExtension` from [Releases](https://github.com/your-repo/releases)
+2. Place the executable in:
+   - **Windows**: `%APPDATA%\Subtl\extensions\`
+   - **macOS**: `~/Library/Application Support/Subtl/extensions/`
+   - **Linux**: `~/.config/Subtl/extensions/`
+3. Launch Subtl and enable the extension in *Settings > Extensions*
 
-### Steps
-1. Clone this repository:
+### For Developers
+1. Ensure system requirements:
+   - OS: Windows 10+, macOS 10.15+, or modern Linux
+   - RAM: 4GB+ (8GB recommended)
+   - Storage: 2GB+ free space
+2. [Download the executable](https://github.com/your-repo/releases)
+3. Include in your project via:
    ```bash
-   git clone https://github.com/yourusername/whisperai-extension.git
-   cd whisperai-extension
+   your-project/
+   ├── extensions/
+   │   └── WhisperAIExtension
+   └── ... 
    ```
-2. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Ensure FFmpeg is installed and accessible in your system's PATH.
 
 ## Usage
 
-### Integrating with Subtl or Other PyQt5 Apps
-1. Copy the `whisperai_extension` folder into your PyQt5 application's directory.
-2. Import the extension in your application:
-   ```python
-   from whisperai_extension import WhisperAIExtension
-   ```
-3. Initialize the extension in your app:
-   ```python
-   whisper_extension = WhisperAIExtension(parent=your_main_window)
-   whisper_extension.setup_ui()  # Add the extension's UI to your app
-   ```
-4. Use the extension to load audio files, generate subtitles, and manipulate them as needed.
+### Subtl Users
+1. Open video/audio file in Subtl
+2. Navigate to *Tools > Generate Subtitles*
+3. Select WhisperAI extension
+4. Choose output format and destination
 
-### Standalone Usage
-You can also use this extension as a standalone tool:
-1. Run the `main.py` script:
-   ```bash
-   python main.py
-   ```
-2. Load an audio file and generate subtitles using the provided GUI.
+### Developer Integration
+#### CLI Example
+```bash
+WhisperAIExtension \
+  --input "audio.mp3" \
+  --output "subtitles.json" \
+  --config "config.json"
+```
+
+#### Python Example
+```python
+import subprocess
+import json
+
+def generate_subtitles(input_path, output_path):
+    cmd = [
+        "./extensions/WhisperAIExtension",
+        "--input", input_path,
+        "--output", output_path,
+        "--config", "config.json"
+    ]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    
+    if result.returncode == 0:
+        with open(output_path) as f:
+            return json.load(f)
+    else:
+        raise Exception(f"Generation failed: {result.stderr}")
+
+# Usage
+subtitles = generate_subtitles("meeting_recording.mp3", "output.json")
+```
+
+#### Output Format (JSON)
+```json
+{
+  "subtitles": [
+    {
+      "start": 0.0,
+      "end": 4.5,
+      "text": "Welcome to today's conference call."
+    },
+    {
+      "start": 4.5,
+      "end": 8.2,
+      "text": "Let's begin with Q1 financial results."
+    }
+  ]
+}
+```
 
 ## Configuration
-- **Model Size**: By default, the extension uses the `base` Whisper model. You can change this in `config.py`:
-  ```python
-  MODEL_SIZE = "large"  # Options: tiny, base, small, medium, large
-  ```
-- **Language**: Set the default language for transcription in `config.py`:
-  ```python
-  LANGUAGE = "en"  # Use language codes like 'en', 'es', 'fr', etc.
-  ```
+Create `config.json` to customize processing:
+```json
+{
+  "model_size": "base",
+  "language": "auto",
+  "device": "cpu",
+  "precision": "float16",
+  "temperature": 0.2
+}
+```
+
+| Parameter     | Options                          | Default |
+|---------------|-----------------------------------|---------|
+| `model_size`  | tiny, base, small, medium, large | base    |
+| `language`    | ISO 639-1 code or "auto"         | auto    |
+| `device`      | cpu, cuda                        | cpu     |
+| `precision`   | float16, float32                 | float16 |
+| `temperature` | 0.0-1.0                          | 0.2     |
+
+## Compatibility
+- Officially supports Subtl v0.5+
+- Compatible with any application that can:
+  - Execute command-line programs
+  - Read/write JSON files
+  - Handle standard input/output streams
 
 ## Contributing
-Contributions are welcome! If you'd like to contribute, please:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Submit a pull request with a detailed description of your changes.
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Distributed under MIT License. See `LICENSE` for details.
 
-## Acknowledgments
-- [OpenAI Whisper](https://github.com/openai/whisper) for the speech recognition model.
-- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) for the GUI framework.
-
-## Support
-If you encounter any issues or have questions, please open an issue on this repository or contact the maintainer.
-
----
-
-Feel free to customize this template to better fit your project's specifics. Let me know if you need further assistance!app.
+## Acknowledgements
+- OpenAI for the revolutionary [Whisper](https://openai.com/research/whisper) model
+- The open-source community for invaluable contributions
+``` 
