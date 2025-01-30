@@ -33,7 +33,7 @@ A standalone WhisperAI extension for Python GUI applications, featuring pre-bund
    /opt/subtl-extensions/whisperai/
    ```
 
-## Hardware Requirements Guide
+## IMPORTANT!!
 
 Choose your model based on hardware capabilities and accuracy needs:
 
