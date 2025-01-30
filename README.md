@@ -85,7 +85,7 @@ Check your system capabilities:
 - **All Platforms:** Included `check_compatibility.exe` tool
 
 
-## Python Integration
+## For Developers
 
 ### Basic Usage
 ```python
