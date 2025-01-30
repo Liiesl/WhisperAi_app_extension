@@ -33,20 +33,57 @@ A standalone WhisperAI extension for Python GUI applications, featuring pre-bund
    /opt/subtl-extensions/whisperai/
    ```
 
-### For Python Developers
-1. Include the appropriate installer in your application's installer
-2. Default installation paths for Python detection:
-   ```python
-   # Cross-platform detection example
-   import sys
-   import platform
+## Hardware Requirements Guide
 
-   EXTENSION_PATHS = {
-       'Windows': r'C:\Program Files\YourApp\WhisperAI',
-       'Darwin': '/Applications/YourApp/WhisperAI/',
-       'Linux': '/opt/your-app/whisperai/'
-   }
-   ```
+Choose your model based on hardware capabilities and accuracy needs:
+
+### Model Comparison Table
+| Model Size | CPU Requirements          | RAM  | GPU Recommendation          | Disk Space | Processing Speed* | Best For                  |
+|------------|---------------------------|------|------------------------------|------------|-------------------|---------------------------|
+| **Tiny**   | Modern mobile processor   | 4GB+ | Integrated graphics          | 100MB      | 1× real-time      | Low-end PCs, Quick edits  |
+| **Base**   | i5/Ryzen 5 (4-core)       | 6GB+ | Entry-level discrete GPU     | 500MB      | 4× faster         | General purpose use       |
+| **Small**  | i7/Ryzen 7 (6-core)       | 8GB+ | GTX 1660/RTX 3050 (4GB VRAM) | 1GB        | 2× faster         | Content creators          |
+| **Medium** | i9/Ryzen 9 (8-core)       | 12GB+| RTX 3060/RX 6700 (8GB VRAM)  | 2GB        | 1.5× faster       | Professional transcriptions |
+| **Large**  | Xeon/Threadripper (12-core)| 16GB+| RTX 4080/RX 7900 (12GB VRAM) | 3GB        | 1×                | Studio-grade production   |
+
+_*Speed relative to audio duration when using recommended GPU_
+
+### Decision Guidelines
+
+**Choose Tiny if:**
+- Using a laptop without dedicated graphics
+- Need instant results for short clips (<5 minutes)
+- Have limited storage space
+
+**Choose Base/Small if:**
+- Typical desktop/laptop with gaming GPU
+- Balance between speed and accuracy needed
+- Processing videos under 30 minutes
+
+**Choose Medium/Large if:**
+- Have a high-end workstation with powerful GPU
+- Need broadcast-quality subtitles
+- Working with complex audio (multiple speakers, technical terms)
+
+### Critical Requirements
+- **GPU Users:** Requires compute capability 5.0+ (NVIDIA) or RDNA2+ (AMD)
+- **Apple Silicon:** Medium/Large models require M1 Pro/Max/Ultra chips
+- **Windows:** Needs DirectX 12 Ultimate for GPU acceleration
+- **Linux:** Requires Vulkan 1.3 drivers for AMD GPUs
+
+### Performance Tips
+1. **RAM vs Model Size:** Your system RAM should be _at least 2×_ the model size
+2. **VRAM Formula:** Minimum GPU memory = Model size × 1.5
+   - Example: Large model (3GB) needs ≥4.5GB VRAM
+3. **Batch Processing:** Add 2GB RAM overhead per concurrent transcription
+
+### Verification Tools
+Check your system capabilities:
+- **Windows:** `dxdiag` in Start menu
+- **macOS:** About This Mac > System Report
+- **Linux:** `lspci -v | grep -i vga`
+- **All Platforms:** Included `check_compatibility.exe` tool
+
 
 ## Python Integration
 
