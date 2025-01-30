@@ -119,7 +119,7 @@ Create `config.json` to customize processing:
 | `temperature` | 0.0-1.0                          | 0.2     |
 
 ## Compatibility
-- Officially supports Subtl v0.5+
+- Officially supports Subtl v1.0
 - Compatible with any application that can:
   - Execute command-line programs
   - Read/write JSON files
